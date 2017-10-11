@@ -1,10 +1,13 @@
 void setup() {
-Serial.begin(9600) ; // パソコンとシリアル通信の準備を行う
+Serial.begin(9600) ; // パソコン(ArduinoIDE)とシリアル通信の準備
 }
 void loop() {
-char c ;
-if (Serial.available() > 0) { // データをIDEから受信したら処理開始
-c = Serial.read() ; // データを１バイト読込む
-Serial.write(c) ; // そのままデータを送り返す
-}
+int ans , temp , tv ;
+ans = analogRead(0) ; // アナログ０番ピンからセンサー値を読込む
+tv = map(ans,0,1023,0,5000) ; // センサー値を電圧に変換する
+temp = map(tv,300,1600,-30,100) ; // 電圧から温度に変換する
+Serial.println(ans) ; // ansの値をパソコン(ＩＤＥ)に送る
+Serial.println(tv) ;　// tvの値をパソコンに送る
+Serial.println(temp) ;  // tempの値をパソコンに送る
+delay(1000) ; // １秒毎に繰り返す
 }
