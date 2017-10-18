@@ -9,5 +9,5 @@ temp = map(tv,300,1600,-30,100) ; // 電圧から温度に変換する
 Serial.println(ans) ; // ansの値をパソコン(ＩＤＥ)に送る
 Serial.println(tv) ;　// tvの値をパソコンに送る
 Serial.println(temp) ;  // tempの値をパソコンに送る
-delay(1000) ; // １秒毎に繰り返す
+delay(500) ; // １秒毎に繰り返す
 }
