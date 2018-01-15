@@ -1,0 +1,90 @@
+#include<LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); // KanaLiquidCrystalクラスに変更する。
+
+int temp = 0;
+int count = 0;
+int count2 = 0;
+int hosuu = 0;
+int Max;
+int Min;
+int standard;
+char state = 0;
+int steps = 0;
+
+void setup()
+{
+  Serial.begin(9600) ; // シリアルモニターの初期化をする
+  lcd.begin(16,2);
+  lcd.clear();
+  lcd.setCursor(0,0);
+}
+void loop()
+{
+  long x, y, z ;
+  long all;
+  x = y = z = 0;
+  x = analogRead(3) ; // Ｘ軸
+  y = analogRead(4) ; // Ｙ軸
+  z = analogRead(5) ; // Ｚ軸
+
+  all = x + y + z ;
+  
+  Serial.print(x) ;
+  Serial.print(",");
+  Serial.print(y) ;
+  Serial.print(",");
+  Serial.print(z) ;
+  Serial.print(",");
+  Serial.print(all) ;
+  Serial.print(",");
+  Serial.print(standard);
+  Serial.print(",");
+  Serial.print(Max);
+  Serial.print(",");
+  Serial.print(Min);
+  Serial.println("");
+
+  if ( all < standard -10){
+    temp = 1;
+  }
+  if (temp == 1 and all > standard + 10){
+    temp = 0;
+    hosuu += 1 ;
+  }
+
+  if (count > 100){
+    Max = all;
+  }
+  if (count2 > 100){
+    Min = all;
+  }
+
+  if (all > Max){
+    Max = all;
+    count = 0;
+  }
+  if ( all < Min){
+    Min = all;
+    count2 = 0;
+  }
+
+  standard = (Max + Min)/2;
+
+  count = count + 1;
+  count2 = count2 + 1;
+
+  lcd.setCursor(0,0);
+  lcd.print(hosuu);
+  lcd.print("\xce");
+  lcd.setCursor(11,0);
+  lcd.print("x=");
+  lcd.print(x);
+  lcd.setCursor(5,1);
+  lcd.print("y=");
+  lcd.print(y);
+  lcd.print(" z=");
+  lcd.print(z);
+  
+  delay(100) ;
+}
